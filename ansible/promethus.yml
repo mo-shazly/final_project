@@ -1,0 +1,6 @@
+---
+- name: install and configure promethus
+  hosts: monitoring
+  become: true
+  roles:
+    - cloudalchemy.promethus

@@ -1,0 +1,56 @@
+name: cicd pipeline for terraform ans ansible
+on:
+    push:
+        branches:
+            - main
+jobs:
+    terraform:
+        name: terraform deployment
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout config files
+              uses: actions/checkout@v2
+
+            - name: setup terraform 
+              uses: hashicorp/setup-terraform@v3.1.2
+
+            - name: "Configure AWS Credentials" 
+              uses: aws-actions/configure-aws-credentials@v4.0.2
+              with:
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                aws-region: us-east-1
+          
+
+            - name: Terraform init
+              run: terraform init
+              working-directory: ./terraform
+
+            - name: terraform apply
+              run: terraform apply -auto-approve
+              working-directory: ./terraform
+
+    ansible:
+        name: ansible deployments
+        needs: terraform
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout
+              uses: actions/checkout@v2
+
+            - name: install ansible
+              run: sudo apt update && sudo apt install ansible -y
+
+            - name: install ansible galaxy roles
+              run: ansible-galaxy install -r ./ansible/requirements.yml
+
+            - name: setup ssh private key
+              run: |
+                echo "${{ secrets.ID_RSA }}" > ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa
+
+            - name: install prom
+              run: ansible-playbook -i ./ansible/inventory.ini ./ansible/promethus.yml
+
+            - name: install grafana
+              run: ansible-playbook -i ./ansible/inventory.ini ./ansible/grafana.yml
