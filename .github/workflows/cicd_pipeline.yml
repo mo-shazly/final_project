@@ -1,0 +1,13 @@
+name: cicd pipeline
+
+on: 
+    push:
+        branches:
+            - main
+jobs:
+    terraform:
+        name: terraform apply
+        runs-on: ubuntu-lates
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v2
