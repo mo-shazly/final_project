@@ -25,6 +25,17 @@ jobs:
             - name: Terraform init
               run: terraform init
               working-directory: ./terraform
+              
+            - name: setup ssh private key
+              run: |
+                ls -la
+                ls -la ~/.ssh
+                echo "${{ secrets.ID_RSA }}" > ~/.ssh/id_rsa
+                echo "${{ secrets.ID_RSA_PUB }}" > ~/.ssh/id_rsa.pub
+                chmod 600 ~/.ssh/id_rsa
+                chmod 600 ~/.ssh/id_rsa.pub
+                ls -la ~/.ssh
+
 
             - name: terraform apply
               run: terraform apply -auto-approve
