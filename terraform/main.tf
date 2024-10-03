@@ -8,6 +8,7 @@ resource "aws_key_pair" "deployer" {
 }
 
 
+
 resource "aws_security_group" "allow_ssh_http" {
     name          = "allow_ssh"
     description   = "allow ssh and http access"
