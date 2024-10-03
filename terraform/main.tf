@@ -1,6 +1,15 @@
 provider "aws" {
     region = "us-west-2"
 }
+terraform {
+  backend "s3" {
+    bucket         = "terraform-state-myproject-123456"
+    key            = "terraform.tfstate"
+    region         = "us-west-2"
+    dynamodb_table = "terraform-locks"  # The DynamoDB table for state locking
+    encrypt        = true                 # Enable server-side encryption
+  }
+}
 
 
 data "aws_vpc" "default" {
