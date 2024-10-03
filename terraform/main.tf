@@ -13,6 +13,7 @@ terraform {
 
 
 
+
 data "aws_vpc" "default" {
   id = "vpc-097a52b71ad705eb8"
 }
