@@ -36,6 +36,8 @@ jobs:
                 chmod 600 ~/.ssh/id_rsa
                 chmod 600 ~/.ssh/id_rsa.pub
                 ls -la ~/.ssh
+                terraform import aws_key_pair.deployer deployer-key
+
 
 
             - name: terraform apply
