@@ -78,7 +78,7 @@ resource "aws_db_instance" "default" {
 
 resource "aws_db_subnet_group" "default" {
   name       = "default-subnet-group"
-  subnet_ids = data.aws_subnet_ids.default.ids
+  subnet_ids = data.aws_subnet.default.ids
 
   tags = {
     Name = "default-subnet-group"
