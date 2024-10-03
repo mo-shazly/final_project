@@ -1,4 +1,37 @@
 ---
-roles:
- - name: cloudalchemy.promethus
- - name: cloudalchemy.grafana
+- name: Setup Prometheus and Grafana
+ hosts: all
+ become: yes
+ gather_facts: true
+ vars:
+   # Prometheus
+   # Service Management
+   prometheus_service_state: started
+   prometheus_service_enabled: true
+   # Configuration
+   prometheus_global_scrape_interval: 30s
+   prometheus_global_external_labels:
+     instance: "{{ ansible_hostname }}"
+   # Grafana
+   # Service Management
+   grafana_service_state: started
+   grafana_service_enabled: true
+   #Configuration
+   grafana_url:
+http://localhost:3000
+   grafana_security:
+     admin_user: admin
+     admin_password: admin
+   grafana_datasources:
+     - name: Prometheus
+       type: prometheus
+       access: proxy
+       url:
+http://localhost:9090
+       is_default: true
+       basic_auth: false
+       json_data:
+         time_field: time
+ roles:
+   - role: prometheus.prometheus.prometheus
+   - role: grafana.grafana.grafana

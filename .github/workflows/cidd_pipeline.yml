@@ -14,11 +14,12 @@ jobs:
             - name: install ansible
               run: sudo apt update && sudo apt install ansible -y
 
-            - name: install ansible galaxy roles
-              run: ansible-galaxy install -r ./ansible/requirements.yml
 
-            - name: install prom
-              run: ansible-playbook -i ./ansible/hosts ./ansible/promethus.yml
+            - name: Install Ansible Collection [Prometheus]
+              run: ansible-galaxy collection install prometheus.prometheus
 
-            - name: install grafana
-              run: ansible-playbook -i ./ansible/hosts ./ansible/grafana.yml
+            - name: Install Ansible Collection [Grafana]
+              run: ansible-galaxy collection install grafana.grafana
+
+            - name: install 
+              run: ansible-playbook -i ./ansible/hosts requirements.yml
