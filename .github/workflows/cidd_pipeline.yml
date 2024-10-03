@@ -22,4 +22,4 @@ jobs:
               run: ansible-galaxy collection install grafana.grafana
 
             - name: install 
-              run: ansible-playbook -i ./ansible/hosts ./ansible/requirements.yml
+              run: ansible-playbook ./ansible/requirements.yml
