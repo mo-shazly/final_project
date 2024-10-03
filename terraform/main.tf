@@ -3,7 +3,6 @@ provider "aws" {
 }
 
 data "aws_vpc" "default" {
-  default = true
   id = "vpc-097a52b71ad705eb8"
 }
 
