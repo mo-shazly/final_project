@@ -111,27 +111,27 @@ resource "aws_db_subnet_group" "default" {
 
 
 
-resource "aws_s3_bucket" "mybucket" {
-    bucket = "mybucket"
+resource "aws_s3_bucket" "mybucket1" {
+    bucket = "mybucket1"
 }
 
 resource "aws_s3_bucket_acl" "mybucket_acl" {
-    bucket = aws_s3_bucket.mybucket.id
+    bucket = aws_s3_bucket.mybucket1.id
     acl    = "private"
 }
 
 
-resource "aws_lambda_function" "my_lambda" {
-  function_name      = "myLambdaFunction"
-  role               = aws_iam_role.lambda_exec.arn
+resource "aws_lambda_function" "my_lambda1" {
+  function_name      = "myLambdaFunction1"
+  role               = aws_iam_role.lambda_exec1.arn
   handler            = "index.handler"
   runtime            = "nodejs12.x"
   filename           = "lambda_function.zip"
   source_code_hash   = filebase64sha256("lambda_function.zip")
 }
 
-resource "aws_iam_role" "lambda_exec" {
-  name = "serverless_lambda"
+resource "aws_iam_role" "lambda_exec1" {
+  name = "serverless_lambda1"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -146,7 +146,7 @@ resource "aws_iam_role" "lambda_exec" {
   })
 }
 
-resource "aws_cloudwatch_log_group" "lambda_log_group" {
+resource "aws_cloudwatch_log_group" "lambda_log_group1" {
   name              = "/aws/lambda/myLambdaFunction"
   retention_in_days = 14
 }
