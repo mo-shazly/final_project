@@ -38,7 +38,9 @@ jobs:
                 ls -la ~/.ssh
                 
 
-
+            - name: validate
+              run: terraform validate 
+              
             - name: terraform apply
               run: terraform apply -auto-approve
               working-directory: ./terraform

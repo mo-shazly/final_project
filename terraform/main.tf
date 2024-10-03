@@ -47,7 +47,6 @@ resource "aws_security_group" "allow_ssh_http" {
 resource "aws_instance" "monitoring" {
     ami           =  "ami-0c02fb55956c7d316"
     instance_type =  "t2.micro"
-    key_name      = aws_key_pair.deployer.key_name
     security_groups = [aws_security_group.allow_ssh_http.name]
 
     tags = {
