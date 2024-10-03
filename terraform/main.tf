@@ -2,9 +2,17 @@ provider "aws" {
     region = "us-west-2"
 }
 
+data "aws_vpc" "default" {
+  default = true
+}
 
+
+data "aws_subnet_ids" "default" {
+  vpc_id = data.aws_vpc.default.id
+}
 
 resource "aws_security_group" "allow_ssh_http" {
+    vpc_id      = data.aws_vpc.default.id
     name          = "allow_ssh"
     description   = "allow ssh and http access"
 
@@ -55,14 +63,26 @@ resource "aws_instance" "monitoring" {
 }
 
 resource "aws_db_instance" "default" {
-    engine              = "postgres"
-    instance_class      = "db.t2.micro"
-    allocated_storage   = 20
-    db_name             = "mydb"
-    username            = "admin"
-    password            = "password"
-    publicly_accessible = true
-    skip_final_snapshot = true
+  allocated_storage    = 20
+  engine               = "postgres"
+  instance_class       = "db.t2.micro"
+  db_name                 = "mydb"
+  username             = "admin"
+  password             = "password"
+  publicly_accessible  = true
+  skip_final_snapshot  = true
+  vpc_security_group_ids = [aws_security_group.allow_ssh_http.id]
+  db_subnet_group_name = aws_db_subnet_group.default.name  # Use the subnet group
+}
+
+
+resource "aws_db_subnet_group" "default" {
+  name       = "default-subnet-group"
+  subnet_ids = data.aws_subnet_ids.default.ids
+
+  tags = {
+    Name = "default-subnet-group"
+  }
 }
 
 
