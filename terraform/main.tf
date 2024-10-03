@@ -3,9 +3,9 @@ provider "aws" {
 }
 terraform {
   backend "s3" {
-    bucket         = "mybucket"
+    bucket         = "costreports3123"
     key            = "terraform.tfstate"
-    region         = "us-west-2"
+    region         = "us-east-1"
     dynamodb_table = "terraform-locks"  # The DynamoDB table for state locking
     encrypt        = true                 # Enable server-side encryption
   }
