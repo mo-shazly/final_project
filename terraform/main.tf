@@ -11,6 +11,7 @@ data "aws_subnet" "default" {
   vpc_id = data.aws_vpc.default.id
 }
 
+
 resource "aws_security_group" "allow_ssh_http" {
     vpc_id      = data.aws_vpc.default.id
     name          = "allow_ssh"
