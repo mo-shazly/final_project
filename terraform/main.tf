@@ -78,11 +78,10 @@ resource "aws_db_instance" "default" {
 
 
 resource "aws_db_subnet_group" "default" {
-  name       = "default-subnet-group"
-  subnet_ids = data.aws_subnet.default.id
-
-  tags = {
-    Name = "default-subnet-group"
+  name       = "my_db_subnet_group"
+  subnet_ids = [data.aws_subnet.default.id]  # Wrap in brackets to make it a list
+  tags       = {
+    Name = "my_db_subnet_group"
   }
 }
 
