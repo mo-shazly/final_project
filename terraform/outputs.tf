@@ -13,5 +13,5 @@ output "rds_endpoint" {
 
 output "aws_s3_bucket" {
     description = "s3 bucket"
-    value = aws_s3_bucket.mybucket1.bucket
+    value = aws_s3_bucket.mybucket1-shazly.bucket
 }

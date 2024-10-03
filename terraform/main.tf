@@ -66,7 +66,7 @@ resource "aws_security_group" "allow_ssh_http" {
 }
 
 resource "aws_instance" "monitoring" {
-    ami           =  "ami-08eb150f611ca277f"
+    ami           =  "ami-04dd23e62ed049936"
     instance_type =  "t2.micro"
     security_groups = [aws_security_group.allow_ssh_http.name]
 
@@ -91,14 +91,14 @@ resource "aws_db_instance" "default" {
 
 resource "aws_subnet" "subnet_a" {
   vpc_id     = data.aws_vpc.default.id
-  cidr_block = "10.0.1.0/24"
-  availability_zone = "us-west-2a"  
+  cidr_block = "10.0.16.0/20" 
+  availability_zone = "us-west-2a"
 }
 
 resource "aws_subnet" "subnet_b" {
   vpc_id     = data.aws_vpc.default.id
-  cidr_block = "10.0.2.0/24"
-  availability_zone = "us-west-2b"  
+  cidr_block = "10.0.32.0/20"  
+  availability_zone = "us-west-2b"
 }
 
 resource "aws_db_subnet_group" "default" {
@@ -111,27 +111,27 @@ resource "aws_db_subnet_group" "default" {
 
 
 
-resource "aws_s3_bucket" "mybucket1" {
-    bucket = "mybucket1"
+resource "aws_s3_bucket" "mybucket1-shazly" {
+    bucket = "mybucket1-shazly"
 }
 
 resource "aws_s3_bucket_acl" "mybucket_acl" {
-    bucket = aws_s3_bucket.mybucket1.id
+    bucket = aws_s3_bucket.mybucket1-shazly.id
     acl    = "private"
 }
 
 
-resource "aws_lambda_function" "my_lambda1" {
+resource "aws_lambda_function" "my_lambda2" {
   function_name      = "myLambdaFunction1"
-  role               = aws_iam_role.lambda_exec1.arn
+  role               = aws_iam_role.lambda_exec2.arn
   handler            = "index.handler"
-  runtime            = "nodejs12.x"
+  runtime            = "nodejs14.x" 
   filename           = "lambda_function.zip"
   source_code_hash   = filebase64sha256("lambda_function.zip")
 }
 
-resource "aws_iam_role" "lambda_exec1" {
-  name = "serverless_lambda1"
+resource "aws_iam_role" "lambda_exec2" {
+  name = "serverless_lambda2"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -146,7 +146,13 @@ resource "aws_iam_role" "lambda_exec1" {
   })
 }
 
+
+data "aws_cloudwatch_log_group" "existing_log_group" {
+  name = "/aws/lambda/myLambdaFunction"
+}
+
 resource "aws_cloudwatch_log_group" "lambda_log_group1" {
+  count             = length(data.aws_cloudwatch_log_group.existing_log_group) == 0 ? 1 : 0
   name              = "/aws/lambda/myLambdaFunction"
   retention_in_days = 14
 }
