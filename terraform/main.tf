@@ -77,12 +77,12 @@ resource "aws_s3_bucket" "mybucket" {
 }
 
 resource "aws_lambda_function" "my_lambda" {
-    function_name      = "myLambdaFunction"
-    role               = "aws_iam_role.lambda_exec.arn
-    handler            = "index.handler"
-    runtime            = "nodejs12.x"
-    filename           = "lambda_function.zip"
-    source_code_hash   = filebase64sha256("lambda_function.zip")
+  function_name      = "myLambdaFunction"
+  role               = aws_iam_role.lambda_exec.arn
+  handler            = "index.handler"
+  runtime            = "nodejs12.x"
+  filename           = "lambda_function.zip"
+  source_code_hash   = filebase64sha256("lambda_function.zip")
 }
 
 resource "aws_iam_role" "lambda_exec" {
@@ -97,14 +97,11 @@ resource "aws_iam_role" "lambda_exec" {
       Principal = {
         Service = "lambda.amazonaws.com"
       }
-      }
-    ]
+    }]
   })
 }
 
-
 resource "aws_cloudwatch_log_group" "lambda_log_group" {
-    name      =  "/aws/lambda/myLambdaFunction"
-    retenion_in_days = 14
+  name              = "/aws/lambda/myLambdaFunction"
+  retention_in_days = 14
 }
-

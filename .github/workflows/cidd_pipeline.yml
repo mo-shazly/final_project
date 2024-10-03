@@ -30,6 +30,10 @@ jobs:
               run: terraform apply -auto-approve
               working-directory: ./terraform
 
+            - name: terraform destroy
+              run: terraform destroy
+              working-directory: ./terraform
+
     ansible:
         name: ansible deployments
         needs: terraform
