@@ -60,10 +60,10 @@ resource "aws_instance" "monitoring" {
 }
 
 resource "aws_db_instance" "default" {
-    engine              =  "postgres"
-    instance_class      =  "db.t2.micro"
+    engine              = "postgres"
+    instance_class      = "db.t2.micro"
     allocated_storage   = 20
-    name                = "mydb"
+    db_name             = "mydb"
     username            = "admin"
     password            = "password"
     publicly_accessible = true
@@ -71,10 +71,16 @@ resource "aws_db_instance" "default" {
 }
 
 
+
 resource "aws_s3_bucket" "mybucket" {
     bucket = "mybucket"
+}
+
+resource "aws_s3_bucket_acl" "mybucket_acl" {
+    bucket = aws_s3_bucket.mybucket.id
     acl    = "private"
 }
+
 
 resource "aws_lambda_function" "my_lambda" {
   function_name      = "myLambdaFunction"
