@@ -2,6 +2,7 @@ provider "aws" {
     region = "us-west-2"
 }
 
+
 data "aws_vpc" "default" {
   id = "vpc-097a52b71ad705eb8"
 }
@@ -54,7 +55,7 @@ resource "aws_security_group" "allow_ssh_http" {
 }
 
 resource "aws_instance" "monitoring" {
-    ami           =  "ami-0c02fb55956c7d316"
+    ami           =  "ami-08eb150f611ca277f"
     instance_type =  "t2.micro"
     security_groups = [aws_security_group.allow_ssh_http.name]
 
@@ -77,9 +78,21 @@ resource "aws_db_instance" "default" {
 }
 
 
+resource "aws_subnet" "subnet_a" {
+  vpc_id     = data.aws_vpc.default.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-west-2a"  
+}
+
+resource "aws_subnet" "subnet_b" {
+  vpc_id     = data.aws_vpc.default.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = "us-west-2b"  
+}
+
 resource "aws_db_subnet_group" "default" {
   name       = "my_db_subnet_group"
-  subnet_ids = [data.aws_subnet.default.id]  # Wrap in brackets to make it a list
+  subnet_ids = [aws_subnet.subnet_a.id, aws_subnet.subnet_b.id]  # Reference both subnets
   tags       = {
     Name = "my_db_subnet_group"
   }
