@@ -105,7 +105,7 @@ resource "aws_db_subnet_group" "default" {
   }
 }
 
-resource "aws_s3_bucket" "mybucket1" {
+resource "aws_s3_bucket" "mybucket1-shazly" {
   bucket = "mybucket1-shazly"
 }
 
