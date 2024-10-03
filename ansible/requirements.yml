@@ -2,7 +2,7 @@
 - name: Setup Prometheus and Grafana
   hosts: localhost
   become: yes
-  gather_facts: false
+  gather_facts: true
   vars:
     # Prometheus
     # Service Management
