@@ -49,6 +49,7 @@ jobs:
               run: terraform destroy
               working-directory: ./terraform
     ansible:
+      
         name: ansible deployments
         needs: terraform
         runs-on: ubuntu-latest
